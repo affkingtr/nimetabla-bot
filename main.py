@@ -84,15 +84,12 @@ async def run_bot():
     scheduler.add_job(send_periodic_message, "interval", hours=6, args=[app.bot])
     scheduler.start()
 
-    await app.initialize()
-    await app.start()
     logger.info("🚀 Bot başlatıldı ve mesajları dinliyor.")
-    await app.updater.start_polling()
-    await app.updater.idle()
+    await app.run_polling(allowed_updates=Update.ALL_TYPES)
 
 # Flask sunucusunu başlat
 def run_flask():
-    serve(flask_app, host="0.0.0.0", port=8080)
+    serve(flask_app, host="0.0.0.0", port=int(os.environ.get("PORT", 10000)))
 
 # Ana giriş
 if __name__ == "__main__":
